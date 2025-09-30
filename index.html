@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Download YouTube and Instagram videos in high quality with beautiful Apple-inspired design">
+    <meta name="keywords" content="video downloader, youtube downloader, instagram downloader, video download">
+    <meta name="author" content="Your Name">
+    <title>Apple Video Downloader - Download YouTube & Instagram Videos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Alan Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Daily Refreshing Image Gallery Background */
+        .bg-gallery {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-gallery::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100%;
+            height: 100%;
+            gap: 0;
+        }
+
+        .gallery-item {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: zoomPan 20s ease-in-out infinite alternate;
+        }
+
+        .gallery-item:nth-child(even) img {
+            animation-delay: -2s;
+        }
+
+        .gallery-item:nth-child(3n) img {
+            animation-delay: -4s;
+        }
+
+        @keyframes zoomPan {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            50% {
+                transform: scale(1.1) translate(-5%, -5%);
+            }
+            100% {
+                transform: scale(1.05) translate(5%, 5%);
+            }
+        }
+
+        /* Liquid Glass Selection Effect */
+        ::selection {
+            background: linear-gradient(135deg, rgba(0, 113, 227, 0.5), rgba(0, 175, 255, 0.5));
+            color: #fff;
+            text-shadow: 
+                0 0 10px rgba(0, 113, 227, 1),
+                0 0 20px rgba(0, 113, 227, 0.8),
+                0 0 30px rgba(0, 175, 255, 0.6);
+        }
+
+        ::-moz-selection {
+            background: rgba(0, 113, 227, 0.5);
+            color: #fff;
+            text-shadow: 
+                0 0 10px rgba(0, 113, 227, 1),
+                0 0 20px rgba(0, 113, 227, 0.8);
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border-radius: 30px;
+            padding: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+            display: flex;
+            gap: 50px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* Left Side - Quote Section */
+        .quote-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quote-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .daily-image {
+            width: 100%;
+            max-width: 350px;
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .daily-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .quote-content {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .quote-text {
+            font-size: 1.3rem;
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        /* Right Side - Downloader */
+        .downloader-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .downloader-container {
+            width: 100%;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .api-notice {
+            background: rgba(255, 193, 7, 0.15);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .api-notice p {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .api-notice a {
+            color: #ffc107;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .api-notice a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tab Switcher */
+        .tab-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Input Section */
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Alan Sans', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(0, 113, 227, 0.6);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .fetch-btn {
+            padding: 16px 30px;
+            background: linear-gradient(135deg, #0071e3, #0056b3);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 113, 227, 0.4);
+            font-family: 'Alan Sans', sans-serif;
+        }
+
+        .fetch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 113, 227, 0.5);
+        }
+
+        .fetch-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Quality Selector */
+        .quality-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .quality-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .quality-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .quality-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .quality-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .quality-options::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .quality-options::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .quality-option {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quality-option:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(0, 113, 227, 0.4);
+            transform: translateX(5px);
+        }
+
+        .quality-option.selected {
+            background: rgba(0, 113, 227, 0.2);
+            border-color: rgba(0, 113, 227, 0.7);
+            box-shadow: 0 5px 20px rgba(0, 113, 227, 0.3);
+        }
+
+        .quality-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .quality-res {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .quality-size {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #0071e3, #0056b3);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 113, 227, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Alan Sans', sans-serif;
+        }
+
+        .download-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 113, 227, 0.5);
+        }
+
+        .download-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .video-preview {
+            display: none;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-preview.active {
+            display: block;
+        }
+
+        .video-preview img {
+            width: 100%;
+            height: auto;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top: 3px solid #0071e3;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 20px;
+            }
+
+            .main-container {
+                flex-direction: column;
+                padding: 30px;
+                gap: 40px;
+            }
+
+            .quote-section, .downloader-section {
+                width: 100%;
+            }
+
+            .daily-image {
+                max-width: 100%;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Daily Refreshing Image Gallery Background -->
+    <div class="bg-gallery">
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+    
+    <div class="container">
+        <div class="main-container">
+            <!-- Left Side - Quote Section -->
+            <div class="quote-section">
+                <div class="quote-box">
+                    <div class="daily-image">
+                        <img src="https://images.unsplash.com/photo-1695653422853-14b9d1c17cd8?w=800&h=800&fit=crop" alt="Daily inspiration" id="dailyImage">
+                    </div>
+                    <div class="quote-content">
+                        <p class="quote-text" id="quoteText">"Innovation distinguishes between a leader and a follower."</p>
+                        <p class="quote-author" id="quoteAuthor">— Steve Jobs</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Downloader -->
+            <div class="downloader-section">
+                <div class="downloader-container">
+                    <div class="logo">
+                        <h1>Video Downloader</h1>
+                        <p class="subtitle">Download videos in highest quality</p>
+                    </div>
+
+                    <!-- API Notice -->
+                    <div class="api-notice" id="apiNotice">
+                        <p>⚠️ Backend API Required</p>
+                        <p style="font-size: 0.8rem;">Please deploy the backend and update API_URL in the code.<br>
+                        <a href="#setup">See setup instructions</a></p>
+                    </div>
+
+                    <!-- Tab Switcher -->
+                    <div class="tab-switcher">
+                        <button class="tab-btn active" data-tab="youtube">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube">
+                            YouTube
+                        </button>
+                        <button class="tab-btn" data-tab="instagram">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" alt="Instagram">
+                            Instagram
+                        </button>
+                    </div>
+
+                    <!-- Input Section -->
+                    <div class="input-group">
+                        <div class="input-wrapper">
+                            <input type="text" id="videoUrl" placeholder="Paste YouTube URL here...">
+                            <button class="fetch-btn" id="fetchBtn">Fetch</button>
+                        </div>
+                    </div>
+
+                    <!-- Loading -->
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <p>Fetching video information...</p>
+                    </div>
+
+                    <!-- Video Preview -->
+                    <div class="video-preview" id="videoPreview">
+                        <img src="" alt="Video thumbnail" id="videoThumbnail">
+                    </div>
+
+                    <!-- Quality Selection -->
+                    <div class="quality-section" id="qualitySection">
+                        <label class="quality-label">Select Quality:</label>
+                        <div class="quality-options" id="qualityOptions"></div>
+                        <button class="download-btn" id="downloadBtn" disabled>
+                            <span>⬇</span>
+                            <span>Download Video</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ IMPORTANT: Replace with your deployed backend URL
+        // Examples:
+        // const API_URL = 'https://your-app.onrender.com';
+        // const API_URL = 'https://your-app.railway.app';
+        // const API_URL = 'https://your-app.vercel.app';
+        const API_URL = 'http://localhost:3000'; // Change this!
+
+        // Check if API is configured
+        if (API_URL === 'http://localhost:3000') {
+            console.warn('⚠️ API_URL is set to localhost. Please deploy your backend and update this URL.');
+        } else {
+            document.getElementById('apiNotice').style.display = 'none';
+        }
+
+        // Create daily refreshing gallery background
+        const bgImages = [
+            'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1557683316-973673baf926?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1579546929662-711aa81148cf?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=600&h=600&fit=crop'
+        ];
+
+        function createGallery() {
+            const gallery = document.getElementById('galleryGrid');
+            const today = new Date().getDate();
+            
+            for (let i = 0; i < 12; i++) {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                const img = document.createElement('img');
+                const imgIndex = (today + i) % bgImages.length;
+                img.src = bgImages[imgIndex];
+                img.alt = 'Background';
+                item.appendChild(img);
+                gallery.appendChild(item);
+            }
+        }
+
+        createGallery();
+
+        // Daily image and quote rotation
+        const images = [
+            'https://images.unsplash.com/photo-1695653422853-14b9d1c17cd8?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1611348586804-61bf6c080437?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&h=800&fit=crop',
+            'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=800&fit=crop'
+        ];
+
+        const quotes = [
+            { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+            { text: "Design is not just what it looks like and feels like. Design is how it works.", author: "Steve Jobs" },
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Stay hungry. Stay foolish.", author: "Steve Jobs" },
+            { text: "Think different.", author: "Apple Inc." }
+        ];
+
+        // Set daily content based on date
+        const today = new Date().getDate();
+        const imageIndex = today % images.length;
+        const quoteIndex = today % quotes.length;
+        
+        document.getElementById('dailyImage').src = images[imageIndex];
+        document.getElementById('quoteText').textContent = `"${quotes[quoteIndex].text}"`;
+        document.getElementById('quoteAuthor').textContent = `— ${quotes[quoteIndex].author}`;
+
+        // Tab switching
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        let currentTab = 'youtube';
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentTab = btn.dataset.tab;
+                
+                // Reset interface
+                document.getElementById('videoUrl').value = '';
+                document.getElementById('videoUrl').placeholder = 
+                    currentTab === 'youtube' ? 'Paste YouTube URL here...' : 'Paste Instagram URL here...';
+                document.getElementById('qualitySection').classList.remove('active');
+                document.getElementById('videoPreview').classList.remove('active');
+            });
+        });
+
+        let selectedQuality = null;
+        let videoData = null;
+
+        // Fetch button functionality
+        document.getElementById('fetchBtn').addEventListener('click', async () => {
+            const url = document.getElementById('videoUrl').value.trim();
+            
+            if (!url) {
+                alert('Please enter a video URL');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('qualitySection').classList.remove('active');
+            document.getElementById('videoPreview').classList.remove('active');
+            selectedQuality = null;
+            document.getElementById('downloadBtn').disabled = true;
+
+            try {
+                const endpoint = currentTab === 'youtube' 
+                    ? `${API_URL}/api/youtube/info`
+                    : `${API_URL}/api/instagram/info`;
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to fetch video info');
+                }
+
+                document.getElementById('loading').classList.remove('active');
+                
+                // Show video preview
+                const preview = document.getElementById('videoPreview');
+                const thumbnail = document.getElementById('videoThumbnail');
+                thumbnail.src = data.thumbnail;
+                preview.classList.add('active');
+
+                // Store video data
+                window.videoData = data;
+
+                // Show quality options
+                displayQualityOptions(data.qualities);
+                document.getElementById('qualitySection').classList.add('active');
+
+            } catch (error) {
+                document.getElementById('loading').classList.remove('active');
+                alert(`Error: ${error.message}\n\nMake sure your backend is deployed and API_URL is correctly set.`);
+                console.error('Fetch error:', error);
+            }
+        });
+
+        // Display quality options
+        function displayQualityOptions(qualities) {
+            const container = document.getElementById('qualityOptions');
+            container.innerHTML = '';
+            
+            qualities.forEach((quality, index) => {
+                const option = document.createElement('div');
+                option.className = 'quality-option';
+                option.dataset.index = index;
+                option.innerHTML = `
+                    <div class="quality-info">
+                        <div class="quality-res">${quality.quality}</div>
+                        <div class="quality-size">Size: ${quality.size} • ${quality.format.toUpperCase()}</div>
+                    </div>
+                    <div>📥</div>
+                `;
+                
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.quality-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+                    selectedQuality = quality;
+                    document.getElementById('downloadBtn').disabled = false;
+                });
+                
+                container.appendChild(option);
+            });
+        }
+
+        // Download button
+        document.getElementById('downloadBtn').addEventListener('click', async () => {
+            if (selectedQuality) {
+                const videoUrl = document.getElementById('videoUrl').value.trim();
+                const btn = document.getElementById('downloadBtn');
+                
+                // Update button to show processing
+                btn.innerHTML = '<span>⏳</span><span>Processing...</span>';
+                btn.disabled = true;
+                
+                try {
+                    if (currentTab === 'youtube') {
+                        // YouTube download
+                        const downloadUrl = `${API_URL}/api/youtube/download`;
+                        
+                        const response = await fetch(downloadUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                url: videoUrl,
+                                itag: selectedQuality.itag
+                            })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Download failed');
+                        }
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `video_${selectedQuality.quality}.mp4`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+
+                    } else {
+                        // Instagram download
+                        const downloadUrl = `${API_URL}/api/instagram/download`;
+                        
+                        const response = await fetch(downloadUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                url: videoUrl,
+                                qualityUrl: selectedQuality.url
+                            })
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Download failed');
+                        }
+
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = `instagram_video_${selectedQuality.quality}.mp4`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    }
+                    
+                    // Reset button with success state
+                    btn.innerHTML = '<span>✓</span><span>Downloaded!</span>';
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = '<span>⬇</span><span>Download Video</span>';
+                        btn.disabled = false;
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('Download error:', error);
+                    btn.innerHTML = '<span>✗</span><span>Download Failed</span>';
+                    alert(`Error: ${error.message}`);
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = '<span>⬇</span><span>Download Video</span>';
+                        btn.disabled = false;
+                    }, 2000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
